@@ -43,6 +43,28 @@ else
 			}
 		</tbody>
 	</table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Inwoners</th>
+                <th>Land</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var city in cities)
+            {
+                <tr>
+                    <td>@city.Name</td>
+                    <td>@city.Population</td>
+                    <td>@city.CountryName</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" @onclick="() => ConfirmAndDelete(city.Id)">Verwijderen</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 @code {
@@ -83,4 +105,25 @@ else
 
 	private string GetCountryName(int countryId) =>
 		countryNamesById.TryGetValue(countryId, out var name) ? name : "(onbekend)";
+    private async Task SortChanged(ChangeEventArgs e)
+    {
+        await LoadCities(e.Value?.ToString() ?? "asc");
+    }
+
+    private async Task ConfirmAndDelete(int id)
+    {
+        var confirm = await JS.InvokeAsync<bool>("confirm", "Weet je zeker dat je deze stad wilt verwijderen?");
+        if (!confirm) return;
+
+        var http = HttpFactory.CreateClient();
+        var resp = await http.DeleteAsync($"api/cities/{id}");
+        if (resp.IsSuccessStatusCode)
+        {
+            await LoadCities(currentSort);
+        }
+        else
+        {
+            Console.WriteLine($"Verwijderen mislukt: {(int)resp.StatusCode} {resp.ReasonPhrase}");
+        }
+    }
 }
