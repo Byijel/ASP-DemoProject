@@ -1,4 +1,4 @@
-﻿@page "/"
+@page "/"
 @inject IHttpClientFactory HttpClientFactory
 @using System.Net.Http.Json
 @using Ap.Demo.Application.CQRS.City
@@ -112,7 +112,7 @@ else
 
     private async Task ConfirmAndDelete(int id)
     {
-        var confirm = await JS.InvokeAsync<bool>("confirm", "Weet je zeker dat je deze stad wilt verwijderen?");
+         var confirm = await JS.InvokeAsync<bool>("confirm", "Weet je zeker dat je deze stad wilt verwijderen?");
         if (!confirm) return;
 
         var http = HttpFactory.CreateClient();

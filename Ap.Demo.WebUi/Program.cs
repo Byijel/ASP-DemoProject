@@ -51,6 +51,8 @@ namespace Ap.Demo.WebUi
                 .AddInteractiveServerRenderMode();
 
             app.Run();
+
+            app.MapControllers();
         }
     }
 }
