@@ -35,11 +35,5 @@ namespace Ap.Demo.Infrastructure.Repositories
                 .FirstOrDefaultAsync(c => c.Name == name && c.CountryId == countryId);
         }
 
-        //delete city
-        public override  void Delete(City city)
-        {
-            _context.Cities.Remove(city);
-        }
-
     }
 }
