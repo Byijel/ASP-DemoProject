@@ -25,9 +25,9 @@ namespace Ap.Demo.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public void Delete(T entity)
+        public virtual void Delete(T entity)
         {
-            throw new NotImplementedException();
+            dbSet.Remove(entity);
         }
 
         public Task<IEnumerable<T>> GetAll()
@@ -35,9 +35,9 @@ namespace Ap.Demo.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<T?> GetById(int id)
+        public virtual async Task<T?> GetById(int id)
         {
-            throw new NotImplementedException();
+            return await dbSet.FindAsync(id);
         }
 
         public T Update(T entinty)
