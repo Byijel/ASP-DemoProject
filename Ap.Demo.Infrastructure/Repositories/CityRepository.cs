@@ -5,23 +5,13 @@ using Ap.Demo.Infrastructure.Contexts;
 
 namespace Ap.Demo.Infrastructure.Repositories
 {
-    public class CityRepository : ICityRepository
+    public class CityRepository : GenericRepository<City>, ICityRepository
     {
         private readonly MyCitiesContext _context;
 
-        public CityRepository(MyCitiesContext context)
+        public CityRepository(MyCitiesContext context) : base(context)
         {
             _context = context;
-        }
-
-        public Task<City> Add(City entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(City entity)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<City>> GetAll(string sortOrder = "asc")
@@ -32,19 +22,5 @@ namespace Ap.Demo.Infrastructure.Repositories
                 : query.OrderBy(c => c.Population)).ToListAsync();
         }
 
-        public Task<IEnumerable<City>> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<City?> GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public City Update(City entinty)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
