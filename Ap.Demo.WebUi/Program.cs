@@ -18,6 +18,13 @@ namespace Ap.Demo.WebUi
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
+            //Add controllers and HttpClient
+            builder.Services.AddControllers();
+            builder.Services.AddHttpClient();
+
+            // Configureer de DbContext
+            builder.Services.AddDbContext<MyCitiesContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("MyCities")));
 
             // HttpClient to call API
             builder.Services.AddHttpClient("ApiClient", client =>
