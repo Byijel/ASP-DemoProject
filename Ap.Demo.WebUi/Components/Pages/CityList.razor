@@ -1,0 +1,82 @@
+﻿@page "/cities"
+@inject IUnitofWork uow
+@inject IMapper Mapper
+@inject IJSRuntime JS
+
+<h3>Lijst van Steden</h3>
+
+<select @onchange="SortChanged">
+    <option value="asc">Oplopend (inwoners)</option>
+    <option value="desc">Aflopend (inwoners)</option>
+</select>
+
+@if (cities == null)
+{
+    <p>Laden...</p>
+}
+else if (!cities.Any())
+{
+    <p>Geen steden gevonden.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Inwoners</th>
+                <th>Land</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var city in cities)
+            {
+                <tr>
+                    <td>@city.Name</td>
+                    <td>@city.Population</td>
+                    <td>@city.CountryName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<CityDto>? cities;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCities("asc");
+    }
+
+    private async Task LoadCities(string sortOrder)
+    {
+        try
+        {
+            var citiesData = await uow.Cities.GetAll(sortOrder);
+            if (citiesData == null)
+            {
+                Console.WriteLine("Geen data opgehaald van uow.Cities.GetAllAsync.");
+                return;
+            }
+            cities = Mapper.Map<IEnumerable<CityDto>>(citiesData);
+            if (cities == null)
+            {
+                Console.WriteLine("Mapping van citiesData naar CityDto mislukt.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Fout bij het laden van steden: {ex.Message}");
+            if (ex.InnerException != null)
+            {
+                Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+            }
+        }
+    }
+
+    private async Task SortChanged(ChangeEventArgs e)
+    {
+        await LoadCities(e.Value?.ToString() ?? "asc");
+    }
+}
