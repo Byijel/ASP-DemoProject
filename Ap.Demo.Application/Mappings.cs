@@ -9,7 +9,7 @@ namespace Ap.Demo.Application.Mappings
     {
         public MappingProfile()
         {
-            CreateMap<City, CityDto>()
+            CreateMap<City, CityDTO>()
                 .ForMember(dest => dest.CountryName, opt => opt.MapFrom(src => src.Country.Name));
         }
     }

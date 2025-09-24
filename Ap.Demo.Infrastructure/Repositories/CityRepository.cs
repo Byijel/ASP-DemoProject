@@ -22,5 +22,9 @@ namespace Ap.Demo.Infrastructure.Repositories
                 : query.OrderBy(c => c.Population)).ToListAsync();
         }
 
+        public Task<string> GetByName(string name)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

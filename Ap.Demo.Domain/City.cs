@@ -11,7 +11,7 @@ namespace Ap.Demo.Domain
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public int Population { get; set; }
+        public long Population { get; set; }
 
         // Foreign key naar Country
         public int CountryId { get; set; }

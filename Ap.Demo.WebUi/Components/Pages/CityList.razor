@@ -42,7 +42,7 @@ else
 }
 
 @code {
-    private IEnumerable<CityDto>? cities;
+    private IEnumerable<CityDTO>? cities;
 
     protected override async Task OnInitializedAsync()
     {
@@ -53,13 +53,13 @@ else
     {
         try
         {
-            var citiesData = await uow.Cities.GetAll(sortOrder);
+            var citiesData = await uow.CityRepository.GetAll(sortOrder);
             if (citiesData == null)
             {
                 Console.WriteLine("Geen data opgehaald van uow.Cities.GetAllAsync.");
                 return;
             }
-            cities = Mapper.Map<IEnumerable<CityDto>>(citiesData);
+            cities = Mapper.Map<IEnumerable<CityDTO>>(citiesData);
             if (cities == null)
             {
                 Console.WriteLine("Mapping van citiesData naar CityDto mislukt.");

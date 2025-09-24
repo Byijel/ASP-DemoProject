@@ -8,7 +8,9 @@ namespace Ap.Demo.Application.Interfaces
 {
     public interface IUnitofWork : IDisposable
     {
-        ICityRepository Cities { get; }
+        ICityRepository CityRepository { get; }
+
+        ICountryRepository CountryRepository { get; }
         Task Commit();
     }
 }
