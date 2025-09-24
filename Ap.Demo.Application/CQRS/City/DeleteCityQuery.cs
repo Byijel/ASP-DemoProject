@@ -22,6 +22,12 @@ namespace Ap.Demo.Application.CQRS.City
                 throw new KeyNotFoundException($"City {request.Id} not found.");
             }
 
+            var allCities = await _uow.CityRepository.GetAll();
+            if(allCities.count()<=1)
+            {
+                throw new InvalidOperationException("Cannot delete the last city in the database.");
+            }
+
             _uow.CityRepository.Delete(entity);
             await _uow.Commit();
         }
