@@ -1,6 +1,7 @@
 ﻿using Ap.Demo.Application.Interfaces;
 using Ap.Demo.Domain;
 using Ap.Demo.Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,17 @@ namespace Ap.Demo.Infrastructure.Repositories
             this.context = context;
         }
 
-        public IEnumerable<Country> getById(int id)
+        public IEnumerable<Country> GetById(int id)
         {
             return context.Countries.Where(c => c.Id == id);
+        }
+
+        public async Task<IEnumerable<Country>> GetAll()
+        {
+            return await context.Countries
+                .AsNoTracking()
+                .OrderBy(c => c.Name)
+                .ToListAsync();
         }
 
 

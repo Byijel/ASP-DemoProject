@@ -21,6 +21,11 @@ namespace Ap.Demo.Infrastructure.Repositories
                 ? query.OrderByDescending(c => c.Population)
                 : query.OrderBy(c => c.Population)).ToListAsync();
         }
+        public async Task<City> Add(City entity)
+        {
+            await _context.Cities.AddAsync(entity);
+            return entity;
+        }
 
         public async Task<City?> GetByNameAndCountryId(string name, int countryId)
         {

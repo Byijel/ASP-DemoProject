@@ -19,5 +19,12 @@ namespace Ap.Demo.API.Controllers
             var result = await _mediator.Send(new GetAllCitiesQuery { SortOrder = sortOrder });
             return Ok(result);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<CityDTO>> Add([FromBody] CityDTO dto)
+        {
+            var result = await _mediator.Send(new AddCommand { City = dto });
+            return CreatedAtAction(nameof(GetAll), new { sortOrder = "asc" }, result);
+        }
     }
 }

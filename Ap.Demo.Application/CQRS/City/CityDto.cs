@@ -11,7 +11,6 @@ namespace Ap.Demo.Application.CQRS.City
         public int Id { get; set; }
         public string Name { get; set; }
         public long Population { get; set; }
-        public int CountryId { get; set; } // For dropdown selection
-        public string CountryName { get; set; } // For displaying of name
+        public int CountryId { get; set; }
     }
 }
