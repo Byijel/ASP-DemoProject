@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Ap.Demo.Application.CQRS.City;
 using MediatR;
-using Ap.Demo.Application.CQRS.City;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Ap.Demo.WebUi.Controllers
+namespace Ap.Demo.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CitiesController : ControllerBase
+    public class CitiesController : APIv1Controller
     {
         private readonly IMediator _mediator;
 
@@ -18,8 +16,7 @@ namespace Ap.Demo.WebUi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CityDTO>>> GetAll([FromQuery] string sortOrder = "asc")
         {
-            var query = new GetAllCitiesQuery { SortOrder = sortOrder };
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(new GetAllCitiesQuery { SortOrder = sortOrder });
             return Ok(result);
         }
     }

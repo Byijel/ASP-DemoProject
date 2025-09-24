@@ -18,12 +18,12 @@ namespace Ap.Demo.WebUi
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-            // Configureer de DbContext
-            builder.Services.AddDbContext<MyCitiesContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("MyCities")));
 
-            builder.Services.RegisterInfrastructure();
-            builder.Services.RegisterApplication();
+            // HttpClient to call API
+            builder.Services.AddHttpClient("ApiClient", client =>
+            {
+                client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]!);
+            });
 
             var app = builder.Build();
 
