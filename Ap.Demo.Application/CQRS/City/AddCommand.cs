@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
 using Ap.Demo.Application.Interfaces;
+using AutoMapper;
+using Ap.Demo.Domain;
 
 
 
@@ -24,14 +26,14 @@ namespace Ap.Demo.Application.CQRS.City
         {
             this.uow = uow;
 
-            RuleFor(c => c.City.Name)
+            RuleFor(c => c.City)
                 .NotEmpty()
                 .WithMessage("City name cannot be empty")
-                .MustAsync(async (name, cancellation) => await UniqueCityName(name))
-                .WithMessage("City name already exists in database");
+                .MustAsync(async (city, cancellation) => await UniqueCityInCountry(city.Name, city.CountryId))
+                .WithMessage("City name already exists in selected country");
 
             RuleFor(c => c.City.Population)
-                .LessThanOrEqualTo(10_000_000_000)
+                .LessThanOrEqualTo(10_000_000_000L)
                 .WithMessage("Population must be less then 10 billion");
 
             RuleFor(c => c.City.CountryId)
@@ -39,12 +41,34 @@ namespace Ap.Demo.Application.CQRS.City
                 .WithMessage("You must select a country from the dropdown menu");
         }
 
-        private async Task<bool> UniqueCityName(string cityName)
+        private async Task<bool> UniqueCityInCountry(string cityName, int countryId)
         {
-            var existingCity = await uow.CityRepository.GetByName(cityName);
+            var existingCity = await uow.CityRepository.GetByNameAndCountryId(cityName, countryId);
             return existingCity == null;
         }
-
-
     }
+
+    public class AddCommandHandler : IRequestHandler<AddCommand, CityDTO>
+    {
+        private readonly IUnitofWork uow;
+        private readonly IMapper mapper;
+
+        public AddCommandHandler(IUnitofWork uow, IMapper mapper)
+        {
+            this.uow = uow;
+            this.mapper = mapper;
+        }
+        
+        public async Task<CityDTO> Handle(AddCommand request, CancellationToken cancellationToken)
+        {
+            var cityEntity = mapper.Map<Ap.Demo.Domain.City>(request.City);
+
+            var savedCity = await uow.CityRepository.Add(cityEntity);
+
+            await uow.Commit();
+
+            return mapper.Map<CityDTO>(savedCity);
+        }
+    }
+
 }

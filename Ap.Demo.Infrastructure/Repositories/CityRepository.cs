@@ -22,9 +22,10 @@ namespace Ap.Demo.Infrastructure.Repositories
                 : query.OrderBy(c => c.Population)).ToListAsync();
         }
 
-        public Task<string> GetByName(string name)
+        public async Task<City?> GetByNameAndCountryId(string name, int countryId)
         {
-            throw new NotImplementedException();
+            return await _context.Cities
+                .FirstOrDefaultAsync(c => c.Name == name && c.CountryId == countryId);
         }
     }
 }

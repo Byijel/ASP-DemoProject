@@ -6,6 +6,6 @@ namespace Ap.Demo.Application.Interfaces
     {
         Task<IEnumerable<City>> GetAll(string sortOrder = "asc");
 
-        Task<string> GetByName(string name);
+        Task<City> GetByNameAndCountryId(string name, int  countryId);
     }
 }
