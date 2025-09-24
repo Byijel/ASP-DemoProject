@@ -1,5 +1,6 @@
 using MediatR;
 using Ap.Demo.Application.Interfaces;
+using System.Linq;
 
 namespace Ap.Demo.Application.CQRS.City
 {
@@ -23,7 +24,7 @@ namespace Ap.Demo.Application.CQRS.City
             }
 
             var allCities = await _uow.CityRepository.GetAll();
-            if(allCities.count()<=1)
+            if (allCities.Count() <= 1)
             {
                 throw new InvalidOperationException("Cannot delete the last city in the database.");
             }

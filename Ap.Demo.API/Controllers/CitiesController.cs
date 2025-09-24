@@ -26,5 +26,12 @@ namespace Ap.Demo.API.Controllers
             var result = await _mediator.Send(new AddCommand { City = dto });
             return CreatedAtAction(nameof(GetAll), new { sortOrder = "asc" }, result);
         }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _mediator.Send(new DeleteCityQuery(id));
+            return NoContent();
+        }
     }
 }

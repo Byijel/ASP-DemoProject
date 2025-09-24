@@ -20,29 +20,32 @@ namespace Ap.Demo.Infrastructure.Repositories
             this.dbSet = context.Set<T>();
         }
 
-        public Task<T> Add(T entity)
+        public virtual async Task<T> Add(T entity)
         {
-            throw new NotImplementedException();
+            await dbSet.AddAsync(entity);
+            return entity;
         }
 
-        public virtual void Delete(T entity)
+        public void Delete(T entity)
         {
             dbSet.Remove(entity);
         }
 
-        public Task<IEnumerable<T>> GetAll()
+        public virtual async Task<IEnumerable<T>> GetAll()
         {
-            throw new NotImplementedException();
+            return await dbSet.ToListAsync();
         }
 
-        public virtual async Task<T?> GetById(int id)
+        public async Task<T?> GetById(int id)
         {
             return await dbSet.FindAsync(id);
         }
 
-        public T Update(T entinty)
+        public virtual T Update(T entity)
         {
-            throw new NotImplementedException();
+            dbSet.Update(entity);
+            return entity;
         }
-    }
+
+	}
 }

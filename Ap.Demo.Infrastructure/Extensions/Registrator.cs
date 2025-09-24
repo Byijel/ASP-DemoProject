@@ -17,6 +17,7 @@ namespace Ap.Demo.Infrastructure.Extensions
             services.AddScoped<ICountryRepository, CountryRepository>();
 
             services.AddScoped<IUnitofWork, UnitofWork>();
+            //services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }
