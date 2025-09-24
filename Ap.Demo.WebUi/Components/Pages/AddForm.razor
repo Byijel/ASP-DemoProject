@@ -1,0 +1,169 @@
+﻿@page "/addForm"
+@rendermode InteractiveServer
+@inject IHttpClientFactory HttpClientFactory
+@using System.Linq
+@using System.Net.Http.Json
+@using Ap.Demo.Application.CQRS.City
+@using Ap.Demo.Application.CQRS.Country
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Mvc
+
+<PageTitle>Stad toevoegen</PageTitle>
+
+<h3>Stad toevoegen</h3>
+
+<EditForm Model="form" OnValidSubmit="HandleValidSubmit">
+	<DataAnnotationsValidator />
+	<ValidationSummary />
+
+	<div class="mb-3">
+		<label for="name" class="form-label">Naam</label>
+		<InputText id="name" class="form-control" @bind-Value="form.Name" />
+		@if (string.IsNullOrWhiteSpace(form.Name))
+		{
+			<div class="text-danger">Naam is verplicht.</div>
+		}
+	</div>
+
+	<div class="mb-3">
+		<label for="population" class="form-label">Inwoners</label>
+		<InputNumber TValue="long?" id="population" class="form-control" @bind-Value="form.Population" />
+		@if (!form.Population.HasValue)
+		{
+			<div class="text-danger">Inwoners is verplicht en moet een getal zijn.</div>
+		}
+		else if (form.Population.Value < 0 || form.Population.Value > 10_000_000_000L)
+		{
+			<div class="text-danger">Inwoners moet tussen 0 en 10.000.000.000 liggen.</div>
+		}
+	</div>
+
+	<div class="mb-3">
+		<label for="country" class="form-label">Land</label>
+		<InputSelect id="country" class="form-select" @bind-Value="form.CountryId">
+			<option value="0">-- Selecteer land --</option>
+			@if (countries != null)
+			{
+				@foreach (var c in countries)
+				{
+					<option value="@c.Id">@c.Name</option>
+				}
+			}
+		</InputSelect>
+		@if (form.CountryId == 0)
+		{
+			<div class="text-danger">Selecteer een land.</div>
+		}
+	</div>
+
+	<button class="btn btn-primary" disabled="@(!CanSubmit || countries == null)">Toevoegen</button>
+
+	@if (!string.IsNullOrEmpty(serverError))
+	{
+		<div class="text-danger mt-2">@serverError</div>
+	}
+	@if (!string.IsNullOrEmpty(successMessage))
+	{
+		<div class="text-success mt-2">@successMessage</div>
+	}
+</EditForm>
+
+@code {
+	// Local form model so we can use nullable long? to customize the empty-number message
+	private class CityForm
+	{
+		public string Name { get; set; } = string.Empty;
+		public long? Population { get; set; } = null;
+		public int CountryId { get; set; } = 0;
+	}
+
+	private CityForm form = new CityForm();
+	private List<CountryDTO>? countries;
+	private string? serverError;
+	private string? successMessage;
+
+	private bool CanSubmit =>
+		!string.IsNullOrWhiteSpace(form.Name)
+		&& form.Population.HasValue
+		&& form.Population.Value >= 0
+		&& form.Population.Value <= 10_000_000_000L
+		&& form.CountryId != 0;
+
+	protected override async Task OnInitializedAsync()
+	{
+		await LoadCountries();
+	}
+
+	private async Task LoadCountries()
+	{
+		try
+		{
+			var client = HttpClientFactory.CreateClient("ApiClient");
+			var response = await client.GetAsync("/api/v1/countries");
+			response.EnsureSuccessStatusCode();
+
+			var data = await response.Content.ReadFromJsonAsync<IEnumerable<CountryDTO>>();
+			countries = data?.ToList() ?? new List<CountryDTO>();
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Fout bij het laden van landen: {ex.Message}");
+			countries = new List<CountryDTO>();
+		}
+	}
+
+	private async Task HandleValidSubmit()
+	{
+		serverError = null;
+		successMessage = null;
+
+		if (!CanSubmit) return;
+
+		try
+		{
+			var client = HttpClientFactory.CreateClient("ApiClient");
+			// Map local form to DTO used by API
+			var newCity = new CityDTO
+			{
+				Name = form.Name,
+				Population = form.Population!.Value,
+				CountryId = form.CountryId
+			};
+
+			var response = await client.PostAsJsonAsync("/api/v1/cities", newCity);
+
+			if (response.IsSuccessStatusCode)
+			{
+				successMessage = "Stad succesvol toegevoegd.";
+				form = new CityForm(); // reset form
+			}
+			else
+			{
+				string? errorText = null;
+				try
+				{
+					var problem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+					if (problem?.Errors?.Count > 0)
+					{
+						errorText = string.Join(" ", problem.Errors.Values.SelectMany(v => v));
+					}
+				}
+				catch { }
+
+				if (string.IsNullOrWhiteSpace(errorText))
+				{
+					errorText = await response.Content.ReadAsStringAsync();
+					if (string.IsNullOrWhiteSpace(errorText))
+						errorText = $"Fout: {response.StatusCode}";
+				}
+				serverError = errorText;
+			}
+		}
+		catch (Exception ex)
+		{
+			serverError = $"Fout bij toevoegen: {ex.Message}";
+		}
+
+		StateHasChanged();
+	}
+}

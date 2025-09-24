@@ -12,7 +12,12 @@ namespace Ap.Demo.Infrastructure.Extensions
         public static IServiceCollection RegisterInfrastructure(this IServiceCollection services)
         {
             services.RegisterDbContext();
+
+            services.AddScoped<ICityRepository, CityRepository>();
+            services.AddScoped<ICountryRepository, CountryRepository>();
+
             services.AddScoped<IUnitofWork, UnitofWork>();
+
             return services;
         }
 

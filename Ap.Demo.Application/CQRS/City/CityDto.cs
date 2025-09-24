@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Ap.Demo.Application.CQRS.City
 {
-    public class CityDto
+    public class CityDTO
     {
+        public int Id { get; set; }
         public string Name { get; set; }
-        public int Population { get; set; }
-        public string CountryName { get; set; }
+        public long Population { get; set; }
+        public int CountryId { get; set; }
     }
 }

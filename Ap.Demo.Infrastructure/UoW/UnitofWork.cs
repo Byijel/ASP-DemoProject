@@ -13,14 +13,18 @@ namespace Ap.Demo.Infrastructure.UoW
     public class UnitofWork : IUnitofWork
     {
         private readonly MyCitiesContext _context;
+        public ICityRepository cityRepo { get; private set; }
+        public ICountryRepository countryRepo { get; private set; }
 
-        public ICityRepository Cities { get; private set; }
-
-        public UnitofWork(MyCitiesContext context)
+        public UnitofWork(MyCitiesContext context, ICityRepository cityRepo, ICountryRepository countryRepo)
         {
             _context = context;
-            Cities = new CityRepository(_context);
+            this.cityRepo = cityRepo;
+            this.countryRepo = countryRepo;
         }
+
+        public ICityRepository CityRepository => cityRepo;
+        public ICountryRepository CountryRepository => countryRepo;
 
         public async Task Commit()
         {

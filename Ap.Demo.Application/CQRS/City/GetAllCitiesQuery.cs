@@ -9,12 +9,12 @@ using MediatR;
 
 namespace Ap.Demo.Application.CQRS.City
 {
-    public class GetAllCitiesQuery : IRequest<IEnumerable<CityDto>>
+    public class GetAllCitiesQuery : IRequest<IEnumerable<CityDTO>>
     {
         public string SortOrder { get; set; } = "asc";
     }
 
-    public class GetAllCitiesQueryHandler : IRequestHandler<GetAllCitiesQuery, IEnumerable<CityDto>>
+    public class GetAllCitiesQueryHandler : IRequestHandler<GetAllCitiesQuery, IEnumerable<CityDTO>>
     {
         private readonly IUnitofWork _uow;
         private readonly IMapper _mapper;
@@ -25,10 +25,10 @@ namespace Ap.Demo.Application.CQRS.City
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<CityDto>> Handle(GetAllCitiesQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<CityDTO>> Handle(GetAllCitiesQuery request, CancellationToken cancellationToken)
         {
-            var cities = await _uow.Cities.GetAll(request.SortOrder);
-            return _mapper.Map<IEnumerable<CityDto>>(cities);
+            var cities = await _uow.CityRepository.GetAll(request.SortOrder);
+            return _mapper.Map<IEnumerable<CityDTO>>(cities);
         }
     }
 }
