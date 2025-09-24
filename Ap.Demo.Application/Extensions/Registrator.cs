@@ -1,8 +1,9 @@
-﻿using Ap.Demo.Application.Interfaces;
+﻿using Ap.Demo.Application.Behaviours;
+using AutoMapper;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using AutoMapper;
 
 namespace Ap.Demo.Application.Extensions
 {
@@ -12,6 +13,10 @@ namespace Ap.Demo.Application.Extensions
         {
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+
             return services;
         }
     }

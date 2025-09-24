@@ -40,6 +40,8 @@ namespace Ap.Demo.API
                 app.UseSwaggerUI();
             }
 
+            app.UseMiddleware<Ap.Demo.API.Middleware.ExceptionHandlingMiddleware>();
+
             app.UseCors("AllowWebUi");
 
             app.UseHttpsRedirection();

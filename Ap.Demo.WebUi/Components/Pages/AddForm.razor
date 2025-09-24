@@ -12,14 +12,14 @@
 
 <h3>Stad toevoegen</h3>
 
-<EditForm Model="newCity" OnValidSubmit="HandleValidSubmit">
+<EditForm Model="form" OnValidSubmit="HandleValidSubmit">
 	<DataAnnotationsValidator />
 	<ValidationSummary />
 
 	<div class="mb-3">
 		<label for="name" class="form-label">Naam</label>
-		<InputText id="name" class="form-control" @bind-Value="newCity.Name" />
-		@if (string.IsNullOrWhiteSpace(newCity.Name))
+		<InputText id="name" class="form-control" @bind-Value="form.Name" />
+		@if (string.IsNullOrWhiteSpace(form.Name))
 		{
 			<div class="text-danger">Naam is verplicht.</div>
 		}
@@ -27,8 +27,12 @@
 
 	<div class="mb-3">
 		<label for="population" class="form-label">Inwoners</label>
-		<InputNumber TValue="long" id="population" class="form-control" @bind-Value="newCity.Population" />
-		@if (newCity.Population < 0 || newCity.Population > 10_000_000_000L)
+		<InputNumber TValue="long?" id="population" class="form-control" @bind-Value="form.Population" />
+		@if (!form.Population.HasValue)
+		{
+			<div class="text-danger">Inwoners is verplicht en moet een getal zijn.</div>
+		}
+		else if (form.Population.Value < 0 || form.Population.Value > 10_000_000_000L)
 		{
 			<div class="text-danger">Inwoners moet tussen 0 en 10.000.000.000 liggen.</div>
 		}
@@ -36,7 +40,7 @@
 
 	<div class="mb-3">
 		<label for="country" class="form-label">Land</label>
-		<InputSelect id="country" class="form-select" @bind-Value="newCity.CountryId">
+		<InputSelect id="country" class="form-select" @bind-Value="form.CountryId">
 			<option value="0">-- Selecteer land --</option>
 			@if (countries != null)
 			{
@@ -46,7 +50,7 @@
 				}
 			}
 		</InputSelect>
-		@if (newCity.CountryId == 0)
+		@if (form.CountryId == 0)
 		{
 			<div class="text-danger">Selecteer een land.</div>
 		}
@@ -65,16 +69,25 @@
 </EditForm>
 
 @code {
+	// Local form model so we can use nullable long? to customize the empty-number message
+	private class CityForm
+	{
+		public string Name { get; set; } = string.Empty;
+		public long? Population { get; set; } = null;
+		public int CountryId { get; set; } = 0;
+	}
+
+	private CityForm form = new CityForm();
 	private List<CountryDTO>? countries;
-	private CityDTO newCity = new CityDTO { CountryId = 0, Population = 0 };
 	private string? serverError;
 	private string? successMessage;
 
 	private bool CanSubmit =>
-		!string.IsNullOrWhiteSpace(newCity.Name)
-		&& newCity.CountryId != 0
-		&& newCity.Population >= 0
-		&& newCity.Population <= 10_000_000_000L;
+		!string.IsNullOrWhiteSpace(form.Name)
+		&& form.Population.HasValue
+		&& form.Population.Value >= 0
+		&& form.Population.Value <= 10_000_000_000L
+		&& form.CountryId != 0;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -109,12 +122,20 @@
 		try
 		{
 			var client = HttpClientFactory.CreateClient("ApiClient");
+			// Map local form to DTO used by API
+			var newCity = new CityDTO
+			{
+				Name = form.Name,
+				Population = form.Population!.Value,
+				CountryId = form.CountryId
+			};
+
 			var response = await client.PostAsJsonAsync("/api/v1/cities", newCity);
 
 			if (response.IsSuccessStatusCode)
 			{
 				successMessage = "Stad succesvol toegevoegd.";
-				newCity = new CityDTO { CountryId = 0, Population = 0 };
+				form = new CityForm(); // reset form
 			}
 			else
 			{

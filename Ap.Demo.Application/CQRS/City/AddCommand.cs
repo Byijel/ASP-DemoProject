@@ -26,11 +26,8 @@ namespace Ap.Demo.Application.CQRS.City
         {
             this.uow = uow;
 
-            RuleFor(c => c.City)
-                .NotEmpty()
-                .WithMessage("City name cannot be empty")
-                .MustAsync(async (city, cancellation) => await UniqueCityInCountry(city.Name, city.CountryId))
-                .WithMessage("City name already exists in selected country");
+            RuleFor(c => c.City.Name)
+                .NotEmpty().WithMessage("City name cannot be empty");
 
             RuleFor(c => c.City.Population)
                 .LessThanOrEqualTo(10_000_000_000L)
@@ -39,12 +36,11 @@ namespace Ap.Demo.Application.CQRS.City
             RuleFor(c => c.City.CountryId)
                 .NotEqual(0)
                 .WithMessage("You must select a country from the dropdown menu");
-        }
 
-        private async Task<bool> UniqueCityInCountry(string cityName, int countryId)
-        {
-            var existingCity = await uow.CityRepository.GetByNameAndCountryId(cityName, countryId);
-            return existingCity == null;
+            RuleFor(c => c.City)
+                .MustAsync(async (city, cancellation) =>
+                    await uow.CityRepository.GetByNameAndCountryId(city.Name, city.CountryId) == null)
+                .WithMessage("City name already exists in selected country");
         }
     }
 
