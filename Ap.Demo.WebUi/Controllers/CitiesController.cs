@@ -16,7 +16,7 @@ namespace Ap.Demo.WebUi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CityDto>>> GetAll([FromQuery] string sortOrder = "asc")
+        public async Task<ActionResult<IEnumerable<CityDTO>>> GetAll([FromQuery] string sortOrder = "asc")
         {
             var query = new GetAllCitiesQuery { SortOrder = sortOrder };
             var result = await _mediator.Send(query);
@@ -26,7 +26,7 @@ namespace Ap.Demo.WebUi.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _mediator.Send(new DeleteCityCommand(id));
+            await _mediator.Send(new DeleteCityQuery(id));
             return NoContent();
         }
     }

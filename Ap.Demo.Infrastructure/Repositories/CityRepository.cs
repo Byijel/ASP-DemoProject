@@ -28,8 +28,6 @@ namespace Ap.Demo.Infrastructure.Repositories
         }
 
         public async Task<City?> GetByNameAndCountryId(string name, int countryId)
-        //find city by id
-        public override async Task<City?> GetById(int id)
         {
             return await _context.Cities
                 .FirstOrDefaultAsync(c => c.Name == name && c.CountryId == countryId);
