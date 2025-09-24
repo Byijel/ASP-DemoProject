@@ -1,5 +1,5 @@
 @page "/"
-@rendermode InteractiveServer
+@rendermode InteractiveServer //for 
 @inject IHttpClientFactory HttpClientFactory
 @inject IJSRuntime JS
 @using System.Net.Http.Json
@@ -9,8 +9,6 @@
 <div class="d-flex align-items-center justify-content-between mb-3">
 	<h3 class="mb-0">Lijst van Steden</h3>
 	<div>
-		<button class="btn btn-warning me-2" @onclick="TestClick">Test Button</button>
-		<button class="btn btn-info me-2" @onclick="@(() => Console.WriteLine("Simple click works!"))">Simple Test</button>
 		<a class="btn btn-primary" href="/addForm">Stad toevoegen</a>
 	</div>
 </div>
@@ -46,9 +44,8 @@ else
 					<td>@city.Name</td>
 					<td>@city.Population</td>
 					<td>@GetCountryName(city.CountryId)</td>
-					<td>ID: @city.Id</td>
 					<td>
-						<button class="btn btn-sm btn-danger" @onclick="@(() => DeleteCity(city.Id))">Delete @city.Id</button>
+						<button class="btn btn-sm btn-danger" @onclick="@(() => DeleteCity(city.Id))">X</button>
 					</td>
 				</tr>
 			}
@@ -98,15 +95,8 @@ else
 
 	private string currentSort = "asc";
 
-	private void TestClick()
-	{
-		Console.WriteLine("TEST BUTTON CLICKED - This proves button clicks work!");
-	}
-
 	private async Task DeleteCity(int id)
-	{
-		Console.WriteLine($"DeleteCity called with ID: {id}");
-		
+	{	
 		try
 		{
 			var confirm = await JS.InvokeAsync<bool>("confirm", "Weet je zeker dat je deze stad wilt verwijderen?");
