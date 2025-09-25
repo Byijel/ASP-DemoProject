@@ -2,26 +2,33 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using Ap.Demo.Infrastructure.Seeding;
+using System.Reflection;
+using Ap.Demo.Infrastructure.Configuration;
 
 namespace Ap.Demo.Infrastructure.Contexts
 {
     public class MyCitiesContext : DbContext
     {
-        public MyCitiesContext(DbContextOptions<MyCitiesContext> options)
-            : base(options) { }
+        public MyCitiesContext(DbContextOptions<MyCitiesContext> options) : base(options)
+        {
 
-        public DbSet<City> Cities => Set<City>();
-        public DbSet<Country> Countries => Set<Country>();
+        }
+
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Country> Countries { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(MyCitiesContext).Assembly);
+            //modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            // Seeding
-            modelBuilder.SeedCountries();
-            modelBuilder.SeedCities();
+            //modelBuilder.ApplyConfiguration(new CityConfiguration());
+            //modelBuilder.ApplyConfiguration(new CountryConfiguration());
+
+
+            modelBuilder.Entity<City>().Seed();
+            modelBuilder.Entity<Country>().Seed();
         }
     }
 }

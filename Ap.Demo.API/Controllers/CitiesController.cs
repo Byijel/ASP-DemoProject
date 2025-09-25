@@ -1,4 +1,5 @@
 ﻿using Ap.Demo.Application.CQRS.City;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,11 +24,48 @@ namespace Ap.Demo.API.Controllers
         [HttpPost]
         public async Task<ActionResult<CityDTO>> Add([FromBody] CityDTO dto)
         {
-            var result = await _mediator.Send(new AddCommand { City = dto });
-            return CreatedAtAction(nameof(GetAll), new { sortOrder = "asc" }, result);
+            try
+            {
+                var result = await _mediator.Send(new AddCommand { City = dto });
+                return CreatedAtAction(nameof(GetAll), new { sortOrder = "asc" }, result);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Errors);
+            }
+            catch (Exception ex)
+            {
+                // Log the full exception details
+                var innerMessage = ex.InnerException?.Message ?? "No inner exception";
+                var fullMessage = $"Error: {ex.Message}. Inner: {innerMessage}";
+
+                // In development, return the full error
+                return StatusCode(500, new
+                {
+                    StatusCode = 500,
+                    Message = ex.Message,
+                    InnerException = innerMessage,
+                    StackTrace = ex.StackTrace // Remove this in production
+                });
+            }
         }
 
-        [HttpDelete("{id:int}")]
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateCity(int id, [FromBody] UpdateCityDTO city)
+        {
+            if (id != city.Id) return BadRequest();
+            return Ok(await _mediator.Send(new UpdateCitiesCommand() { City = city}));
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetCityById(int id)
+        {
+            return Ok(await _mediator.Send(new GetCityByIdQuery { Id = id }));
+        }
+
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             try

@@ -41,7 +41,7 @@ namespace Ap.Demo.Infrastructure.Repositories
             return await dbSet.FindAsync(id);
         }
 
-        public virtual T Update(T entity)
+        public T Update(T entity)
         {
             dbSet.Update(entity);
             return entity;
