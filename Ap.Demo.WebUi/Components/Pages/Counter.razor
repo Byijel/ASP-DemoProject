@@ -9,8 +9,21 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
+
+
+<input type="type" name="name" @bind = "name" />
+<p>hallo, @name</p>
+
+<button class="btn btn-primary" @onclick="ClickMe">Click me for the console result</button>
+
 @code {
     private int currentCount = 0;
+    private string name = "";
+
+    public void ClickMe()
+    {
+        Console.WriteLine($"halle, {name}");
+    }
 
     private void IncrementCount()
     {

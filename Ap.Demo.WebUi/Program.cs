@@ -1,10 +1,5 @@
 using Ap.Demo.WebUi.Components;
-using Microsoft.EntityFrameworkCore;
-using Ap.Demo.Infrastructure.Contexts;
-using Ap.Demo.Infrastructure.Extensions;
-using Ap.Demo.Application.Extensions;
-using AutoMapper;
-
+using Ap.Demo.WebUi.Services;
 
 namespace Ap.Demo.WebUi
 {
@@ -18,12 +13,8 @@ namespace Ap.Demo.WebUi
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-            // Configureer de DbContext
-            builder.Services.AddDbContext<MyCitiesContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("MyCities")));
-
-            builder.Services.RegisterInfrastructure();
-            builder.Services.RegisterApplication();
+            builder.Services.AddScoped<CityService>();
+            builder.Services.AddHttpClient<CityService>(client => client.BaseAddress = new Uri("https://localhost:7217/"));
 
             var app = builder.Build();
 

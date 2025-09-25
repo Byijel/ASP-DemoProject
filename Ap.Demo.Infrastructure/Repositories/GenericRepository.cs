@@ -35,14 +35,17 @@ namespace Ap.Demo.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<T?> GetById(int id)
+        public async Task<T?> GetById(int id)
         {
-            throw new NotImplementedException();
+            var city = await dbSet.FindAsync(id);
+            return city;
         }
 
-        public T Update(T entinty)
+        public T Update(T city)
         {
-            throw new NotImplementedException();
+            dbSet.Update(city);
+
+            return city;
         }
     }
 }

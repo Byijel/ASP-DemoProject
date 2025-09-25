@@ -1,4 +1,6 @@
-
+using Ap.Demo.Infrastructure.Extensions;
+using Ap.Demo.Application.Extensions;
+using Ap.Demo.API.Controllers;
 namespace Ap.Demo.API
 {
     public class Program
@@ -12,6 +14,10 @@ namespace Ap.Demo.API
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+
+            builder.Services.RegisterInfrastructure();
+            builder.Services.RegisterApplication();
+
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
@@ -22,6 +28,8 @@ namespace Ap.Demo.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseErrorHandlingMiddleware();
 
             app.UseHttpsRedirection();
 

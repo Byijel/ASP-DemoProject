@@ -1,7 +1,7 @@
 ﻿@page "/cities"
-@inject IUnitofWork uow
-@inject IMapper Mapper
-@inject IJSRuntime JS
+@rendermode InteractiveServer
+@inject CityService CityService;
+@inject NavigationManager NavigationManager
 
 <h3>Lijst van Steden</h3>
 
@@ -26,6 +26,7 @@ else
                 <th>Naam</th>
                 <th>Inwoners</th>
                 <th>Land</th>
+                <th>Edit</th>
             </tr>
         </thead>
         <tbody>
@@ -35,6 +36,7 @@ else
                     <td>@city.Name</td>
                     <td>@city.Population</td>
                     <td>@city.CountryName</td>
+                    <td><button class="btn btn-primary" @onclick=" () => GoToEdit(city.Id)">Edit</button></td>
                 </tr>
             }
         </tbody>
@@ -42,7 +44,7 @@ else
 }
 
 @code {
-    private IEnumerable<CityDto>? cities;
+    private List<CityDto>? cities;
 
     protected override async Task OnInitializedAsync()
     {
@@ -51,32 +53,17 @@ else
 
     private async Task LoadCities(string sortOrder)
     {
-        try
-        {
-            var citiesData = await uow.Cities.GetAll(sortOrder);
-            if (citiesData == null)
-            {
-                Console.WriteLine("Geen data opgehaald van uow.Cities.GetAllAsync.");
-                return;
-            }
-            cities = Mapper.Map<IEnumerable<CityDto>>(citiesData);
-            if (cities == null)
-            {
-                Console.WriteLine("Mapping van citiesData naar CityDto mislukt.");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Fout bij het laden van steden: {ex.Message}");
-            if (ex.InnerException != null)
-            {
-                Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
-            }
-        }
+        cities = await CityService.GetAllCities();
     }
 
     private async Task SortChanged(ChangeEventArgs e)
     {
         await LoadCities(e.Value?.ToString() ?? "asc");
+    }
+
+    private void GoToEdit(int id)
+    {
+        Console.WriteLine($"Navigating to /cities/edit/{id}");
+        NavigationManager.NavigateTo($"/cities/edit/{id}");
     }
 }
