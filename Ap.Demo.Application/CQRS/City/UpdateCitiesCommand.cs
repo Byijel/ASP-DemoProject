@@ -7,9 +7,9 @@ using MediatR;
 
 namespace Ap.Demo.Application.CQRS.City
 {
-    public class UpdateCitiesCommand : IRequest<CityDto>
+    public class UpdateCitiesCommand : IRequest<UpdateCityDto>
     {
-        public CityDto City { get; set; }
+        public UpdateCityDto City { get; set; }
     }
 
     public class UpdateCitiesCommandValidator : AbstractValidator<UpdateCitiesCommand>
@@ -23,11 +23,11 @@ namespace Ap.Demo.Application.CQRS.City
                 .GreaterThan(0)
                 .WithMessage("Population must be positive")
                 .LessThan(1000000000)
-                .WithMessage("Population cannot exceed 10 billion");
+                .WithMessage("Population cannot exceed 1 billion");
         }
     }
 
-    public class UpdateCitiesCommandHandler : IRequestHandler<UpdateCitiesCommand, CityDto>
+    public class UpdateCitiesCommandHandler : IRequestHandler<UpdateCitiesCommand, UpdateCityDto>
     {
         private readonly IUnitofWork uow;
         private readonly IMapper mapper;
@@ -38,17 +38,16 @@ namespace Ap.Demo.Application.CQRS.City
             this.mapper = mapper;
         }
 
-        public async Task<CityDto> Handle(UpdateCitiesCommand request, CancellationToken cancellationToken)
+        public async Task<UpdateCityDto> Handle(UpdateCitiesCommand request, CancellationToken cancellationToken)
         {
             var existingCity = await uow.Cities.GetById(request.City.Id);
             if (existingCity == null) throw new NotFoundException("City not found");
 
             mapper.Map(request.City, existingCity);
-            existingCity.Name = existingCity.Name;
             uow.Cities.Update(existingCity);
             await uow.Commit();
 
-            return mapper.Map<CityDto>(existingCity);
+            return mapper.Map<UpdateCityDto>(existingCity);
         }
     }
 }

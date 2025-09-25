@@ -1,4 +1,4 @@
-﻿using Ap.Demo.Application.CQRS.City;
+using Ap.Demo.Application.CQRS.City;
 using Ap.Demo.Application.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -24,7 +24,7 @@ namespace Ap.Demo.API.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateCity(int id, [FromBody] CityDto city)
+        public async Task<IActionResult> UpdateCity(int id, [FromBody] UpdateCityDto city)
         {
             if (id != city.Id) return BadRequest();
             return Ok(await mediator.Send(new UpdateCitiesCommand() { City = city}));

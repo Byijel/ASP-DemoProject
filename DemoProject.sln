@@ -20,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ap.Demo.WebUi", "Ap.Demo.We
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{2C317BE2-0AE0-4843-8C80-6DA47AFE026C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1", "TestProject1\TestProject1.csproj", "{0E4865E4-5939-4B88-B25E-B7B3A954626D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject1", "TestProject1\TestProject1.csproj", "{0E4865E4-5939-4B88-B25E-B7B3A954626D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

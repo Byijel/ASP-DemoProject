@@ -1,4 +1,4 @@
-﻿using Ap.Demo.Application.CQRS.City;
+using Ap.Demo.Application.CQRS.City;
 using Ap.Demo.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
@@ -11,7 +11,6 @@ namespace Ap.Demo.WebUi.Services
     public class CityService
     {
         private readonly HttpClient httpClient;
-        private object json;
 
         public CityService(HttpClient httpClient)
         {
@@ -28,14 +27,11 @@ namespace Ap.Demo.WebUi.Services
             return await httpClient.GetFromJsonAsync<CityDto>($"api/v1/City/{id}") ?? new CityDto();
         }
 
-        public async Task<CityDto> UpdateCity(int id, CityDto city)
+        public async Task<UpdateCityDto> UpdateCity(int id, UpdateCityDto updateDto)
         {
-/*            var json = JsonSerializer.Serialize(city);
-            Console.WriteLine($"Sending PUT request with JSON: {json}");
-            Console.WriteLine($"Updating City ID: {id}, DTO ID: {city.Id}");*/
-            var response = await httpClient.PutAsJsonAsync($"/api/v1/City/{id}", city);
+            var response = await httpClient.PutAsJsonAsync($"/api/v1/City/{id}", updateDto);
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<CityDto>() ?? city;
+            return await response.Content.ReadFromJsonAsync<UpdateCityDto>() ?? new UpdateCityDto();
         }
     }
 }

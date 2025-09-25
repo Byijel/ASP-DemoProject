@@ -38,10 +38,10 @@ namespace TestProject1
             Assert.IsTrue(result.Errors.Any(e => e.ErrorMessage == "Name can be no more than 15 chars"));
         }*/
 
-        [TestMethod]
+         [TestMethod]
         public void Validate_NegativePopulation_ReturnsFalse()
         {
-            var command = new UpdateCitiesCommand { City = new CityDto { Name = "Antwerp", Population = -1 } };
+            var command = new UpdateCitiesCommand { City = new UpdateCityDto { Id = 1, Population = -1 } };
             var result = _validator.Validate(command);
 
             Assert.IsFalse(result.IsValid);
@@ -51,17 +51,17 @@ namespace TestProject1
         [TestMethod]
         public void Validate_PopulationExceedsLimit_ReturnsFalse()
         {
-            var command = new UpdateCitiesCommand { City = new CityDto { Name = "Antwerp", Population = 1000000000 } };
+            var command = new UpdateCitiesCommand { City = new UpdateCityDto { Id = 1, Population = 1000000000 } };
             var result = _validator.Validate(command);
 
             Assert.IsFalse(result.IsValid);
-            Assert.IsTrue(result.Errors.Any(e => e.ErrorMessage == "Population cannot exceed 10 billion"));
+            Assert.IsTrue(result.Errors.Any(e => e.ErrorMessage == "Population cannot exceed 1 billion"));
         }
 
         [TestMethod]
         public void Validate_ValidInput_ReturnsTrue()
         {
-            var command = new UpdateCitiesCommand { City = new CityDto { Name = "Antwerp", Population = 500000 } };
+            var command = new UpdateCitiesCommand { City = new UpdateCityDto { Id = 1, Population = 500000 } };
             var result = _validator.Validate(command);
 
             Assert.IsTrue(result.IsValid);
