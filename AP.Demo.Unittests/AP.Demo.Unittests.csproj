@@ -11,11 +11,14 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="MSTest" Version="3.6.4" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.9" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Ap.Demo.Application\Ap.Demo.Application.csproj" />
     <ProjectReference Include="..\Ap.Demo.Domain\Ap.Demo.Domain.csproj" />
+    <ProjectReference Include="..\Ap.Demo.Infrastructure\Ap.Demo.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
