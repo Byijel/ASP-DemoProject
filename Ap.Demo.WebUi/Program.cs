@@ -22,6 +22,10 @@ namespace Ap.Demo.WebUi
             builder.Services.AddControllers();
             builder.Services.AddHttpClient();
 
+            // Register Application and Infrastructure services
+            builder.Services.RegisterApplication();
+            builder.Services.RegisterInfrastructure(builder.Configuration);
+
             // Configureer de DbContext
             builder.Services.AddDbContext<MyCitiesContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("MyCities")));
@@ -50,9 +54,9 @@ namespace Ap.Demo.WebUi
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
 
-            app.Run();
-
             app.MapControllers();
+
+            app.Run();
         }
     }
 }

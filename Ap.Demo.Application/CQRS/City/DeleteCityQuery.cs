@@ -9,10 +9,12 @@ namespace Ap.Demo.Application.CQRS.City
     public class DeleteCityQueryHandler : IRequestHandler<DeleteCityQuery>
     {
         private readonly IUnitofWork _uow;
+        private readonly IEmailService _emailService;
 
-        public DeleteCityQueryHandler(IUnitofWork uow)
+        public DeleteCityQueryHandler(IUnitofWork uow, IEmailService emailService)
         {
             _uow = uow;
+            _emailService = emailService;
         }
 
         public async Task Handle(DeleteCityQuery request, CancellationToken cancellationToken)
@@ -31,6 +33,16 @@ namespace Ap.Demo.Application.CQRS.City
 
             _uow.CityRepository.Delete(entity);
             await _uow.Commit();
+
+            // send email notification
+            const string adminEmail = "03ayv21@gmail.com"; //admin test email
+            const string subject = "Stad Verwijderd - Systeem Notificatie";
+            string body = $"Een stad is verwijderd uit het systeem.\n\n" +
+                         $"Stad Naam: {entity.Name}\n" +
+                         $"Inwoners: {entity.Population:N0}\n" +
+                         $"Verwijderd op: {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} UTC\n\n" +
+                         $"Deze actie kan niet ongedaan worden gemaakt.";
+            await _emailService.SendEmailAsync(adminEmail, subject, body);
         }
     }
 }
