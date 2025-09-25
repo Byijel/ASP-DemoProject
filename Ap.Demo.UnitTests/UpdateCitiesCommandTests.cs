@@ -1,4 +1,4 @@
-﻿using Ap.Demo.Application.CQRS.City;
+using Ap.Demo.Application.CQRS.City;
 using Ap.Demo.Application.Interfaces;
 using Moq;
 

@@ -1,4 +1,4 @@
-﻿using Ap.Demo.Domain;
+using Ap.Demo.Domain;
 using Ap.Demo.Application.CQRS; 
 using Ap.Demo.Application.CQRS.City;
 using AutoMapper;

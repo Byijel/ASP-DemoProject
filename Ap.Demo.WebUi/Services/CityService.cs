@@ -1,4 +1,4 @@
-﻿using Ap.Demo.Application.CQRS.City;
+using Ap.Demo.Application.CQRS.City;
 using Ap.Demo.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
