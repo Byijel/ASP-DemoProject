@@ -51,12 +51,22 @@ else
 			}
 		</tbody>
 	</table>
+
+	@if (!string.IsNullOrEmpty(errorMessage))
+	{
+		<div class="alert alert-danger mt-3">
+			@errorMessage
+		</div>
+	}
 }
 
 @code {
 	private IEnumerable<CityDTO>? cities;
 	private List<CountryDTO>? countries;
 	private Dictionary<int, string> countryNamesById = new();
+
+	private string currentSort = "asc";
+	private string? errorMessage;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -92,11 +102,9 @@ else
 	private string GetCountryName(int countryId) =>
 		countryNamesById.TryGetValue(countryId, out var name) ? name : "(onbekend)";
 
-
-	private string currentSort = "asc";
-
 	private async Task DeleteCity(int id)
 	{	
+		errorMessage = null; //clear previous message
 		try
 		{
 			var confirm = await JS.InvokeAsync<bool>("confirm", "Weet je zeker dat je deze stad wilt verwijderen?");
@@ -111,7 +119,12 @@ else
 			}
 			else
 			{
-				Console.WriteLine($"Verwijderen mislukt: {(int)resp.StatusCode} {resp.ReasonPhrase}");
+				var serverError = await resp.Content.ReadAsStringAsync();
+				errorMessage = !string.IsNullOrWhiteSpace(serverError)
+					? serverError
+					: $"Verwijderen mislukt: {(int)resp.StatusCode} {resp.ReasonPhrase}";
+
+				//Console.WriteLine($"Verwijderen mislukt: {(int)resp.StatusCode} {resp.ReasonPhrase}");
 			}
 		}
 		catch (Exception ex)

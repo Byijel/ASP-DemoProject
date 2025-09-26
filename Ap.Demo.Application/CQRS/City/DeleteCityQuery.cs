@@ -28,6 +28,7 @@ namespace Ap.Demo.Application.CQRS.City
             var allCities = await _uow.CityRepository.GetAll();
             if (allCities.Count() <= 1)
             {
+
                 throw new InvalidOperationException("Cannot delete the last city in the database.");
             }
 

@@ -30,8 +30,21 @@ namespace Ap.Demo.API.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _mediator.Send(new DeleteCityQuery(id));
-            return NoContent();
-        }
+            try
+            {
+				await _mediator.Send(new DeleteCityQuery(id));
+				return NoContent();
+			}
+            catch (InvalidOperationException ex)
+            {
+				//last city case
+				return BadRequest(ex.Message);
+			}
+			catch (KeyNotFoundException ex)
+			{
+				//city not found
+				return NotFound(ex.Message);
+			}
+		}
     }
 }
