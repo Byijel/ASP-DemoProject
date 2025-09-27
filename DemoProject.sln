@@ -14,9 +14,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ap.Demo.Domain", "Ap.Demo.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ap.Demo.Infrastructure", "Ap.Demo.Infrastructure\Ap.Demo.Infrastructure.csproj", "{A335B068-1311-4F5B-B789-24F8602C1D89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ap.Demo.API", "Ap.Demo.API\Ap.Demo.API.csproj", "{03907CD3-CEEB-4743-8528-D1EF45FFF82B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ap.Demo.API", "Ap.Demo.API\Ap.Demo.API.csproj", "{03907CD3-CEEB-4743-8528-D1EF45FFF82B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ap.Demo.WebUi", "Ap.Demo.WebUi\Ap.Demo.WebUi.csproj", "{8E0F3136-45F2-4250-9661-56C06DED5079}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ap.Demo.WebUi", "Ap.Demo.WebUi\Ap.Demo.WebUi.csproj", "{8E0F3136-45F2-4250-9661-56C06DED5079}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject

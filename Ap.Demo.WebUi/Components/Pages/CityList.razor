@@ -5,7 +5,7 @@
 @using System.Net.Http.Json
 @using Ap.Demo.Application.CQRS.City
 @using Ap.Demo.Application.CQRS.Country
-@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
 
 <div class="d-flex align-items-center justify-content-between mb-3">
 	<h3 class="mb-0">Lijst van Steden</h3>
@@ -36,6 +36,7 @@ else
 				<th>Inwoners</th>
 				<th>Land</th>
 				<th>Acties</th>
+                <th>Edit</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -47,6 +48,9 @@ else
 					<td>@GetCountryName(city.CountryId)</td>
 					<td>
 						<button class="btn btn-sm btn-danger" @onclick="@(() => DeleteCity(city.Id))">X</button>
+					</td>
+                    <td>
+						<button class="btn btn-primary" @onclick=" () => GoToEdit(city.Id)">Edit</button>
 					</td>
 				</tr>
 			}
@@ -85,6 +89,11 @@ else
 		countryNamesById = countries.ToDictionary(c => c.Id, c => c.Name);
 	}
 
+	private void GoToEdit(int id)
+	{
+		NavigationManager.NavigateTo($"/edit/{id}");
+	}
+
 	private async Task LoadCities(string sortOrder)
 	{
 		var client = HttpClientFactory.CreateClient("ApiClient");
@@ -104,18 +113,17 @@ else
 		countryNamesById.TryGetValue(countryId, out var name) ? name : "(onbekend)";
 
 	private async Task DeleteCity(int id)
-	{	
-		errorMessage = null; //clear previous message
+	{
+		errorMessage = null;
 		try
 		{
 			var confirm = await JS.InvokeAsync<bool>("confirm", "Weet je zeker dat je deze stad wilt verwijderen?");
 			if (!confirm) return;
 
-			var client = HttpClientFactory.CreateClient("ApiClient"); 
+			var client = HttpClientFactory.CreateClient("ApiClient");
 			var resp = await client.DeleteAsync($"/api/v1/cities/{id}");
 			if (resp.IsSuccessStatusCode)
 			{
-				Console.WriteLine("Delete successful, reloading cities...");
 				await LoadCities(currentSort);
 			}
 			else
@@ -124,13 +132,11 @@ else
 				errorMessage = !string.IsNullOrWhiteSpace(serverError)
 					? serverError
 					: $"Verwijderen mislukt: {(int)resp.StatusCode} {resp.ReasonPhrase}";
-
-				//Console.WriteLine($"Verwijderen mislukt: {(int)resp.StatusCode} {resp.ReasonPhrase}");
 			}
 		}
-		catch (Exception ex)
+		catch (Exception)
 		{
-			Console.WriteLine($"Delete error: {ex.Message}");
+			errorMessage = "Er ging iets mis bij het verwijderen.";
 		}
 	}
 }

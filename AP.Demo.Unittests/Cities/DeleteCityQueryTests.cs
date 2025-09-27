@@ -83,7 +83,7 @@ namespace AP.Demo.Unittests.Cities
                 "Stad Verwijderd - Systeem Notificatie",
                 It.Is<string>(body => 
                     body.Contains("Test City") && 
-                    body.Contains("100,000") && 
+                    body.Contains("100.000") && 
                     body.Contains("Een stad is verwijderd uit het systeem")
                 )
             ), Times.Once);
@@ -250,7 +250,7 @@ namespace AP.Demo.Unittests.Cities
 
             // Assert
             Assert.IsTrue(capturedEmailBody.Contains("Antwerpen"), "Email body should contain city name");
-            Assert.IsTrue(capturedEmailBody.Contains("523,248"), "Email body should contain formatted population");
+            Assert.IsTrue(capturedEmailBody.Contains("523.248"), "Email body should contain formatted population");
             Assert.IsTrue(capturedEmailBody.Contains("Een stad is verwijderd uit het systeem"), "Email body should contain deletion message");
             Assert.IsTrue(capturedEmailBody.Contains("Deze actie kan niet ongedaan worden gemaakt"), "Email body should contain warning message");
             Assert.IsTrue(capturedEmailBody.Contains(DateTime.UtcNow.ToString("yyyy-MM-dd")), "Email body should contain current date");

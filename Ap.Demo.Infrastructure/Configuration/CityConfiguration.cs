@@ -22,7 +22,7 @@ namespace Ap.Demo.Infrastructure.Configuration
 
             builder.Property(c => c.Population)
                    .IsRequired()
-                   .HasColumnType("int");
+                   .HasColumnType("long");
 
             builder.Property(c => c.CountryId)
                    .IsRequired()

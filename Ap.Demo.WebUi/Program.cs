@@ -1,10 +1,9 @@
-using Ap.Demo.WebUi.Components;
-using Microsoft.EntityFrameworkCore;
+using Ap.Demo.Application.Extensions;
 using Ap.Demo.Infrastructure.Contexts;
 using Ap.Demo.Infrastructure.Extensions;
-using Ap.Demo.Application.Extensions;
-using AutoMapper;
-
+using Ap.Demo.WebUi.Components;
+using Ap.Demo.WebUi.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ap.Demo.WebUi
 {
@@ -18,6 +17,9 @@ namespace Ap.Demo.WebUi
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
+            builder.Services.AddScoped<CityService>();
+            builder.Services.AddHttpClient<CityService>(client => client.BaseAddress = new Uri("https://localhost:7217/"));
+
             //Add controllers and HttpClient
             builder.Services.AddControllers();
             builder.Services.AddHttpClient();
@@ -25,10 +27,6 @@ namespace Ap.Demo.WebUi
             // Register Application and Infrastructure services
             builder.Services.RegisterApplication();
             builder.Services.RegisterInfrastructure(builder.Configuration);
-
-            // Configureer de DbContext
-            builder.Services.AddDbContext<MyCitiesContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("MyCities")));
 
             // HttpClient to call API
             builder.Services.AddHttpClient("ApiClient", client =>

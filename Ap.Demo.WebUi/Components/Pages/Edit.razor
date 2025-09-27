@@ -1,0 +1,93 @@
+﻿@page "/edit/{Id:int}"
+@rendermode InteractiveServer
+@inject CityService CityService
+@inject NavigationManager NavigationManager
+@using Ap.Demo.Application.CQRS.City
+
+<h3>Edit City</h3>
+
+@if (city == null)
+{
+    <p>Laden...</p>
+}
+else
+{
+    <div class="form-group">
+        <label>Name:</label>
+        <input class="form-control" @bind="city.Name" disabled />
+    </div>
+    <div class="form-group">
+        <label>Population:</label>
+        <input class="form-control" @bind="city.Population" />
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-danger">@errorMessage</div>
+        }
+        @if (!string.IsNullOrEmpty(successMessage))
+        {
+            <div class="alert alert-success">@successMessage</div>
+        }
+    </div>
+    <button class="btn btn-primary" @onclick="Save">Save</button>
+    <button class="btn btn-secondary" @onclick="GoBack">Back to List</button>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private CityDTO? city;
+    private string errorMessage = "";
+    private string successMessage = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CitiesById();
+    }
+
+    private async Task CitiesById()
+    {
+        city = await CityService.GetCityById(Id);
+        if (city != null) city.Id = Id;
+    }
+
+    private async Task Save()
+    {
+        if (city == null) return;
+
+        if (city.Population <= 0)
+        {
+            errorMessage = "Population must be greater than 0.";
+            successMessage = "";
+            return;
+        }
+        if (city.Population >= 1000000000)
+        {
+            errorMessage = "Population cannot exceed 1 billion.";
+            successMessage = "";
+            return;
+        }
+
+        try
+        {
+            var updateDto = new UpdateCityDTO { Id = Id, Population = city.Population };
+            var updatedCity = await CityService.UpdateCity(Id, updateDto);
+            city.Population = updatedCity.Population;
+            errorMessage = "";
+            successMessage = "City updated successfully!";
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error updating city: {ex.Message}";
+            successMessage = "";
+        }
+    }
+
+    private void GoBack()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}
+
+
