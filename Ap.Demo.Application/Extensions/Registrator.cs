@@ -4,9 +4,6 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using AutoMapper;
-using Ap.Demo.Application.Behaviors;
-using FluentValidation;
 
 namespace Ap.Demo.Application.Extensions
 {

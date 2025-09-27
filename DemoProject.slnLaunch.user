@@ -1,6 +1,6 @@
 [
   {
-    "Name": "New Profile",
+    "Name": "API + UI",
     "Projects": [
       {
         "Path": "Ap.Demo.API\\Ap.Demo.API.csproj",
