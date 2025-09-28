@@ -37,12 +37,12 @@ namespace Ap.Demo.Application.CQRS.City
 
             // send email notification
             const string adminEmail = "03ayv21@gmail.com"; //admin test email
-            const string subject = "Stad Verwijderd - Systeem Notificatie";
-            string body = $"Een stad is verwijderd uit het systeem.\n\n" +
-                         $"Stad Naam: {entity.Name}\n" +
-                         $"Inwoners: {entity.Population:N0}\n" +
-                         $"Verwijderd op: {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} UTC\n\n" +
-                         $"Deze actie kan niet ongedaan worden gemaakt.";
+            const string subject = "City Deleted - System Notification";
+            string body = $"A city has been deleted from the system.\n\n" +
+                         $"City name: {entity.Name}\n" +
+                         $"Population: {entity.Population:N0}\n" +
+                         $"Deleted on: {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} UTC\n\n" +
+                         $"This action cannot be undone.";
             await _emailService.SendEmailAsync(adminEmail, subject, body);
         }
     }
