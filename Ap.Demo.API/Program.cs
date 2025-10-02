@@ -1,6 +1,7 @@
 using Ap.Demo.API.Extensions;
 using Ap.Demo.Application.Extensions;
 using Ap.Demo.Infrastructure.Extensions;
+using DotNetEnv;
 
 namespace Ap.Demo.API
 {
@@ -8,12 +9,13 @@ namespace Ap.Demo.API
 	{
 		public static void Main(string[] args)
 		{
+			Env.Load();
 			var builder = WebApplication.CreateBuilder(args);
 
 			// Services
 			builder.Services.RegisterApplication();
-			builder.Services.RegisterInfrastructure(builder.Configuration);
-			builder.Services.AddControllers();
+			            builder.Services.RegisterInfrastructure(builder.Configuration);
+			            builder.Services.Configure<Ap.Demo.Application.Configuration.NotificationSettings>(builder.Configuration.GetSection("NotificationSettings"));			builder.Services.AddControllers();
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
 

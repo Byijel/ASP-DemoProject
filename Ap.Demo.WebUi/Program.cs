@@ -3,6 +3,7 @@ using Ap.Demo.Infrastructure.Contexts;
 using Ap.Demo.Infrastructure.Extensions;
 using Ap.Demo.WebUi.Components;
 using Ap.Demo.WebUi.Services;
+using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ap.Demo.WebUi
@@ -11,14 +12,17 @@ namespace Ap.Demo.WebUi
     {
         public static void Main(string[] args)
         {
+            Env.Load();
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-            builder.Services.AddScoped<CityService>();
-            builder.Services.AddHttpClient<CityService>(client => client.BaseAddress = new Uri("https://localhost:7217/"));
+builder.Services.AddHttpClient<CityService>(client =>
+            {
+                client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]!);
+            });
 
             //Add controllers and HttpClient
             builder.Services.AddControllers();
@@ -27,6 +31,7 @@ namespace Ap.Demo.WebUi
             // Register Application and Infrastructure services
             builder.Services.RegisterApplication();
             builder.Services.RegisterInfrastructure(builder.Configuration);
+            builder.Services.Configure<Ap.Demo.Application.Configuration.NotificationSettings>(builder.Configuration.GetSection("NotificationSettings"));
 
             // HttpClient to call API
             builder.Services.AddHttpClient("ApiClient", client =>

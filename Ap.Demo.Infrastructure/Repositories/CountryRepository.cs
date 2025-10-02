@@ -18,12 +18,12 @@ namespace Ap.Demo.Infrastructure.Repositories
             this.context = context;
         }
 
-        public IEnumerable<Country> GetById(int id)
+        public new async Task<Country?> GetById(int id)
         {
-            return context.Countries.Where(c => c.Id == id);
+            return await context.Countries.FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<IEnumerable<Country>> GetAll()
+        public override async Task<IEnumerable<Country>> GetAll()
         {
             return await context.Countries
                 .AsNoTracking()

@@ -17,25 +17,7 @@ namespace Ap.Demo.UnitTests
             _validator = new UpdateCitiesCommandValidator(_mockUow.Object);
         }
 
-        /*        [TestMethod]
-                public void Validate_NullName_ReturnsFalse()
-                {
-                    var command = new UpdateCitiesCommand { City = new CityDto { Name = null, Population = 1000 } };
-                    var result = _validator.Validate(command);
 
-                    Assert.IsFalse(result.IsValid);
-                    Assert.IsTrue(result.Errors.Any(e => e.ErrorMessage == "Name cannot be NULL"));
-                }
-
-                [TestMethod]
-                public void Validate_NameTooLong_ReturnsFalse()
-                {
-                    var command = new UpdateCitiesCommand { City = new CityDto { Name = new string('A', 16), Population = 1000 } };
-                    var result = _validator.Validate(command);
-
-                    Assert.IsFalse(result.IsValid);
-                    Assert.IsTrue(result.Errors.Any(e => e.ErrorMessage == "Name can be no more than 15 chars"));
-                }*/
 
         [TestMethod]
         public void Validate_NegativePopulation_ReturnsFalse()

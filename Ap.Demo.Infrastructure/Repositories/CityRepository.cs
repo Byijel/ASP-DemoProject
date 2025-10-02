@@ -21,7 +21,7 @@ namespace Ap.Demo.Infrastructure.Repositories
                 ? query.OrderByDescending(c => c.Population)
                 : query.OrderBy(c => c.Population)).ToListAsync();
         }
-        public async Task<City> Add(City entity)
+        public override async Task<City> Add(City entity)
         {
             await _context.Cities.AddAsync(entity);
             return entity;
