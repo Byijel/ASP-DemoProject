@@ -9,6 +9,9 @@ using Ap.Demo.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
+using Ap.Demo.Application.Configuration;
+using Microsoft.Extensions.Options;
+
 namespace AP.Demo.Unittests.Cities
 {
     [TestClass]
@@ -17,6 +20,7 @@ namespace AP.Demo.Unittests.Cities
         private Mock<IUnitofWork> _uowMock = null!;
         private Mock<ICityRepository> _cityRepoMock = null!;
         private Mock<IEmailService> _emailServiceMock = null!;
+        private Mock<IOptions<NotificationSettings>> _notificationSettingsMock = null!;
         private DeleteCityQueryHandler _handler = null!;
 
         [TestInitialize]
@@ -25,10 +29,12 @@ namespace AP.Demo.Unittests.Cities
             _uowMock = new Mock<IUnitofWork>();
             _cityRepoMock = new Mock<ICityRepository>();
             _emailServiceMock = new Mock<IEmailService>();
+            _notificationSettingsMock = new Mock<IOptions<NotificationSettings>>();
             
             _uowMock.Setup(u => u.CityRepository).Returns(_cityRepoMock.Object);
+            _notificationSettingsMock.Setup(n => n.Value).Returns(new NotificationSettings { AdminEmail = "03ayv21@gmail.com" });
             
-            _handler = new DeleteCityQueryHandler(_uowMock.Object, _emailServiceMock.Object);
+            _handler = new DeleteCityQueryHandler(_uowMock.Object, _emailServiceMock.Object, _notificationSettingsMock.Object);
         }
 
         [TestMethod]
