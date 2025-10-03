@@ -132,7 +132,7 @@ else
 				var serverError = await resp.Content.ReadAsStringAsync();
 				errorMessage = !string.IsNullOrWhiteSpace(serverError)
 					? serverError
-					: $"Deletion failed: {(int)resp.StatusCode} {resp.ReasonPhrase}";
+					: $"Delete failed: {(int)resp.StatusCode} {resp.ReasonPhrase}";
 			}
 		}
 		catch (Exception)
