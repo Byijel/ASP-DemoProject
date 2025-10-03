@@ -19,6 +19,7 @@ namespace Ap.Demo.Infrastructure.Extensions
             // Configure SMTP settings
             services.Configure<SmtpSettings>(configuration.GetSection("SmtpSettings"));
 
+
             services.RegisterRepositories();
             services.AddScoped<IEmailService, EmailService>();
 

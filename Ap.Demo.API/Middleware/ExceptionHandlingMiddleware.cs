@@ -2,10 +2,7 @@
 using System.Text.Json;
 namespace Ap.Demo.API.Middleware
 {
-    public class OurOwnMiddelware
-    {
 
-    }
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;

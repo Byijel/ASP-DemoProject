@@ -423,3 +423,4 @@ Thumbs.db
 
 # Windows shortcuts
 *.lnk
+.env

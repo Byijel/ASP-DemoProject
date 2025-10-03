@@ -1,6 +1,8 @@
 using MediatR;
 using Ap.Demo.Application.Interfaces;
 using System.Linq;
+using Ap.Demo.Application.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Ap.Demo.Application.CQRS.City
 {
@@ -10,11 +12,13 @@ namespace Ap.Demo.Application.CQRS.City
     {
         private readonly IUnitofWork _uow;
         private readonly IEmailService _emailService;
+        private readonly NotificationSettings _notificationSettings;
 
-        public DeleteCityQueryHandler(IUnitofWork uow, IEmailService emailService)
+        public DeleteCityQueryHandler(IUnitofWork uow, IEmailService emailService, IOptions<NotificationSettings> notificationSettings)
         {
             _uow = uow;
             _emailService = emailService;
+            _notificationSettings = notificationSettings.Value;
         }
 
         public async Task Handle(DeleteCityQuery request, CancellationToken cancellationToken)

@@ -8,40 +8,38 @@
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Mvc
 
-<PageTitle>Stad toevoegen</PageTitle>
+<PageTitle>Add City</PageTitle>
 
-<h3>Stad toevoegen</h3>
+<h3>Add City</h3>
 
 <EditForm Model="form" OnValidSubmit="HandleValidSubmit">
-	<DataAnnotationsValidator />
-	<ValidationSummary />
-
-	<div class="mb-3">
-		<label for="name" class="form-label">Naam</label>
+	    <DataAnnotationsValidator />
+	
+		<div class="mb-3">		<label for="name" class="form-label">Name</label>
 		<InputText id="name" class="form-control" @bind-Value="form.Name" />
 		@if (string.IsNullOrWhiteSpace(form.Name))
 		{
-			<div class="text-danger">Naam is verplicht.</div>
+			<div class="text-danger">Name is required.</div>
 		}
 	</div>
 
 	<div class="mb-3">
-		<label for="population" class="form-label">Inwoners</label>
+		<label for="population" class="form-label">Population</label>
 		<InputNumber TValue="long?" id="population" class="form-control" @bind-Value="form.Population" />
 		@if (!form.Population.HasValue)
 		{
-			<div class="text-danger">Inwoners is verplicht en moet een getal zijn.</div>
+			<div class="text-danger">Population is required and must be a number.</div>
 		}
 		else if (form.Population.Value < 0 || form.Population.Value > 10_000_000_000L)
 		{
-			<div class="text-danger">Inwoners moet tussen 0 en 10.000.000.000 liggen.</div>
+			<div class="text-danger">Population must be between 0 and 10,000,000,000.</div>
 		}
 	</div>
 
 	<div class="mb-3">
-		<label for="country" class="form-label">Land</label>
+		<label for="country" class="form-label">Country</label>
 		<InputSelect id="country" class="form-select" @bind-Value="form.CountryId">
-			<option value="0">-- Selecteer land --</option>
+			<option value="0">-- Select country --</option>
 			@if (countries != null)
 			{
 				@foreach (var c in countries)
@@ -52,11 +50,11 @@
 		</InputSelect>
 		@if (form.CountryId == 0)
 		{
-			<div class="text-danger">Selecteer een land.</div>
+			<div class="text-danger">Please select a country.</div>
 		}
 	</div>
 
-	<button class="btn btn-primary" disabled="@(!CanSubmit || countries == null)">Toevoegen</button>
+	<button class="btn btn-primary" disabled="@(!CanSubmit || countries == null)">Add</button>
 
 	@if (!string.IsNullOrEmpty(serverError))
 	{
@@ -106,7 +104,7 @@
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine($"Fout bij het laden van landen: {ex.Message}");
+			Console.WriteLine($"Error loading countries: {ex.Message}");
 			countries = new List<CountryDTO>();
 		}
 	}
@@ -133,7 +131,7 @@
 
 			if (response.IsSuccessStatusCode)
 			{
-				successMessage = "Stad succesvol toegevoegd.";
+				successMessage = "City added successfully.";
 				form = new CityForm(); // reset form
 			}
 			else
@@ -153,14 +151,14 @@
 				{
 					errorText = await response.Content.ReadAsStringAsync();
 					if (string.IsNullOrWhiteSpace(errorText))
-						errorText = $"Fout: {response.StatusCode}";
+						errorText = $"Error: {response.StatusCode}";
 				}
 				serverError = errorText;
 			}
 		}
 		catch (Exception ex)
 		{
-			serverError = $"Fout bij toevoegen: {ex.Message}";
+			serverError = $"An error occurred while adding the city: {ex.Message}";
 		}
 
 		StateHasChanged();

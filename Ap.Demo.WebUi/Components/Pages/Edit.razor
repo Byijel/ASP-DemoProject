@@ -8,28 +8,34 @@
 
 @if (city == null)
 {
-    <p>Laden...</p>
+    <p>Loading...</p>
 }
 else
 {
-    <div class="form-group">
-        <label>Name:</label>
-        <input class="form-control" @bind="city.Name" disabled />
-    </div>
-    <div class="form-group">
-        <label>Population:</label>
-        <input class="form-control" @bind="city.Population" />
-        @if (!string.IsNullOrEmpty(errorMessage))
-        {
-            <div class="alert alert-danger">@errorMessage</div>
-        }
-        @if (!string.IsNullOrEmpty(successMessage))
-        {
-            <div class="alert alert-success">@successMessage</div>
-        }
-    </div>
-    <button class="btn btn-primary" @onclick="Save">Save</button>
-    <button class="btn btn-secondary" @onclick="GoBack">Back to List</button>
+    <EditForm Model="@city" OnValidSubmit="Save">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label>Name:</label>
+            <InputText class="form-control" @bind-Value="city.Name" disabled />
+        </div>
+        <div class="form-group">
+            <label>Population:</label>
+            <InputNumber class="form-control" @bind-Value="city.Population" />
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-secondary" @onclick="GoBack">Back to List</button>
+    </EditForm>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger">@errorMessage</div>
+    }
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success">@successMessage</div>
+    }
 }
 
 @code {
@@ -54,19 +60,6 @@ else
     private async Task Save()
     {
         if (city == null) return;
-
-        if (city.Population <= 0)
-        {
-            errorMessage = "Population must be greater than 0.";
-            successMessage = "";
-            return;
-        }
-        if (city.Population >= 1000000000)
-        {
-            errorMessage = "Population cannot exceed 1 billion.";
-            successMessage = "";
-            return;
-        }
 
         try
         {

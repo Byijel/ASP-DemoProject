@@ -8,34 +8,34 @@
 @inject NavigationManager NavigationManager
 
 <div class="d-flex align-items-center justify-content-between mb-3">
-	<h3 class="mb-0">Lijst van Steden</h3>
+	<h3 class="mb-0">List of Cities</h3>
 	<div>
-		<a class="btn btn-primary" href="/addForm">Stad toevoegen</a>
+		<a class="btn btn-primary" href="/addForm">Add City</a>
 	</div>
 </div>
 
 <select @onchange="SortChanged" class="form-select w-auto mb-3">
-	<option value="asc">Oplopend (inwoners)</option>
-	<option value="desc">Aflopend (inwoners)</option>
+	<option value="asc">Ascending (population)</option>
+	<option value="desc">Descending (population)</option>
 </select>
 
 @if (cities == null || countries == null)
 {
-	<p>Laden...</p>
+	<p>Loading...</p>
 }
 else if (!cities.Any())
 {
-	<p>Geen steden gevonden.</p>
+	<p>No cities found.</p>
 }
 else
 {
 	<table class="table">
 		<thead>
 			<tr>
-				<th>Naam</th>
-				<th>Inwoners</th>
-				<th>Land</th>
-				<th>Acties</th>
+				<th>Name</th>
+				<th>Population</th>
+				<th>Country</th>
+				<th>Actions</th>
                 <th>Edit</th>
 			</tr>
 		</thead>
@@ -83,6 +83,7 @@ else
 	{
 		var client = HttpClientFactory.CreateClient("ApiClient");
 		var resp = await client.GetAsync("/api/v1/countries");
+	
 		resp.EnsureSuccessStatusCode();
 		var data = await resp.Content.ReadFromJsonAsync<IEnumerable<CountryDTO>>();
 		countries = data?.ToList() ?? new List<CountryDTO>();
@@ -110,7 +111,7 @@ else
 	}
 
 	private string GetCountryName(int countryId) =>
-		countryNamesById.TryGetValue(countryId, out var name) ? name : "(onbekend)";
+		countryNamesById.TryGetValue(countryId, out var name) ? name : "(unknown)";
 
 	private async Task DeleteCity(int id)
 	{
@@ -136,7 +137,7 @@ else
 		}
 		catch (Exception)
 		{
-			errorMessage = "Something went wrong while deleting.";
+			errorMessage = "An error occurred while deleting the city.";
 		}
 	}
 }
