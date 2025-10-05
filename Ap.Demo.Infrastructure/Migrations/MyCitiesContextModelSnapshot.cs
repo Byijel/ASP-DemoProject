@@ -38,7 +38,7 @@ namespace Ap.Demo.Infrastructure.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<long>("Population")
-                        .HasColumnType("long");
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 

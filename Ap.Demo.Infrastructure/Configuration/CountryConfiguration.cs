@@ -12,8 +12,7 @@ namespace Ap.Demo.Infrastructure.Configuration
                    .HasKey(co => co.Id);
 
             builder.Property(co => co.Id)
-                   .ValueGeneratedOnAdd()
-                   .HasColumnType("int");
+                   .ValueGeneratedOnAdd();
 
             builder.Property(co => co.Name)
                    .IsRequired()

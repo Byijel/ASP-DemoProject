@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ap.Demo.Infrastructure.Migrations
 {
     [DbContext(typeof(MyCitiesContext))]
-    [Migration("20250923133258_Initial")]
+    [Migration("20251005094105_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -40,8 +40,8 @@ namespace Ap.Demo.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("Population")
-                        .HasColumnType("int");
+                    b.Property<long>("Population")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -55,28 +55,28 @@ namespace Ap.Demo.Infrastructure.Migrations
                             Id = 1,
                             CountryId = 1,
                             Name = "Antwerpen",
-                            Population = 530000
+                            Population = 530000L
                         },
                         new
                         {
                             Id = 2,
                             CountryId = 1,
                             Name = "Gent",
-                            Population = 260000
+                            Population = 260000L
                         },
                         new
                         {
                             Id = 3,
                             CountryId = 2,
                             Name = "Amsterdam",
-                            Population = 820000
+                            Population = 820000L
                         },
                         new
                         {
                             Id = 4,
                             CountryId = 3,
                             Name = "Parijs",
-                            Population = 2140000
+                            Population = 2140000L
                         });
                 });
 

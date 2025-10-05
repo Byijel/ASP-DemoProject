@@ -12,8 +12,7 @@ namespace Ap.Demo.Infrastructure.Configuration
                    .HasKey(c => c.Id);
 
             builder.Property(c => c.Id)
-                   .ValueGeneratedOnAdd()
-                   .HasColumnType("int");
+                   .ValueGeneratedOnAdd();
 
             builder.Property(c => c.Name)
                    .IsRequired()
@@ -21,12 +20,10 @@ namespace Ap.Demo.Infrastructure.Configuration
                    .HasColumnType("nvarchar(100)");
 
             builder.Property(c => c.Population)
-                   .IsRequired()
-                   .HasColumnType("long");
+                   .IsRequired();
 
             builder.Property(c => c.CountryId)
-                   .IsRequired()
-                   .HasColumnType("int");
+                   .IsRequired();
 
             builder.HasOne(c => c.Country)
                    .WithMany(co => co.Cities)

@@ -72,10 +72,10 @@ namespace Ap.Demo.Infrastructure.Migrations
                 columns: new[] { "Id", "CountryId", "Name", "Population" },
                 values: new object[,]
                 {
-                    { 1, 1, "Antwerpen", 530000 },
-                    { 2, 1, "Gent", 260000 },
-                    { 3, 2, "Amsterdam", 820000 },
-                    { 4, 3, "Parijs", 2140000 }
+                    { 1, 1, "Antwerpen", 530000L },
+                    { 2, 1, "Gent", 260000L },
+                    { 3, 2, "Amsterdam", 820000L },
+                    { 4, 3, "Parijs", 2140000L }
                 });
 
             migrationBuilder.CreateIndex(

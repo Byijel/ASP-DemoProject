@@ -1,28 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-    <PackageReference Include="Moq" Version="4.20.72" />
-    <PackageReference Include="MSTest" Version="3.6.4" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.9" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.9" />
-  </ItemGroup>
+		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Ap.Demo.Application\Ap.Demo.Application.csproj" />
-    <ProjectReference Include="..\Ap.Demo.Domain\Ap.Demo.Domain.csproj" />
-    <ProjectReference Include="..\Ap.Demo.Infrastructure\Ap.Demo.Infrastructure.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="coverlet.collector" Version="6.0.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+		<PackageReference Include="Moq" Version="4.20.72" />
+		<PackageReference Include="MSTest.TestAdapter" Version="3.4.3" />
+		<PackageReference Include="MSTest.TestFramework" Version="3.4.3" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Ap.Demo.Application\Ap.Demo.Application.csproj" />
+		<ProjectReference Include="..\Ap.Demo.Infrastructure\Ap.Demo.Infrastructure.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+	</ItemGroup>
 
 </Project>
